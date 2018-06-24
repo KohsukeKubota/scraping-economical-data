@@ -5,8 +5,9 @@ import csv
 import urllib
 
 
-if not os.path.isdir('../data/raw-data/'):
-    os.makedirs('../data/raw-data/')
+if not os.path.isdir('../data/'):
+    os.makedirs('../data/')
+
 options = ChromeOptions()
 options.add_argument('--headless')
 driver = Chrome('../chromedriver', options=options)
@@ -29,8 +30,8 @@ for (str_, section_list, element_index) in zip(str_list, section_lists, element_
     for text_, section_, element_ in zip(text_list, section_list, element_index):
         driver.execute_script("document.getElementById('{}{}').style.display='block';".format(str_, element_))
         title = section_.find_element_by_xpath("//*[@id='{}{}']/div/h5/span[1]".format(str_, element_)).text
+        print("{}: {}".format(i, title))
         title_list.append(title)
         url = section_.find_element_by_xpath("//*[@id='{}{}']/div/div[2]/p[3]/a".format(str_, element_)).get_attribute("href")
-        urllib.request.urlretrieve(url, '../data/raw-data/{}-{}.csv'.format(i, title))
+        urllib.request.urlretrieve(url, '../data/{}-{}.csv'.format(i, title))
         i += 1
-        print(i)
